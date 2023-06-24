@@ -1,3 +1,7 @@
+using Business.Abstract;
+using Business.Concrete;
+using DataAccess.Abstract;
+using DataAccess.Concrete.EfCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +27,17 @@ namespace MvcWebUI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            //DataAccess
+            services.AddTransient<ICategoryDal, EfCoreCategoryDal>();
+            services.AddTransient<ICustomerDal, EfCoreCustomerDal>();
+            services.AddTransient<IProductDal, EfCoreProductDal>();
+            services.AddTransient<IPurchaseDal, EfCorePurchaseDal>();
+            services.AddTransient<ISalesDal, EfCoreSalesDal>();
+            services.AddTransient<IStockDal, EfCoreStockDal>();
+
+            //Business
+            services.AddTransient<ICategoryService, CategoryManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
