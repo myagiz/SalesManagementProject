@@ -1,1 +1,171 @@
-﻿
+﻿@model Entities.DTOs.AllCategoryDto
+
+<div style="margin-bottom:20px;text-align: right;">
+    <div class="row">
+        <div class="col-md-9">
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-primary" id="showAddForm">Kategori Ekle</button>
+        </div>
+    </div>
+</div>
+
+@if (TempData["Error"]! != null)
+{
+    <div style="margin-bottom:20px" class="alert alert-danger" role="alert">
+
+        <div class="text-danger">@TempData["Error"]</div>
+    </div>
+
+}
+<div id="addFormContainer" class="card" style="margin-bottom:20px;padding:15px;box-shadow: 5px 4px 12px 0px #00000052;display:none">
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-controller="Category" asp-action="Add" method="post">
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label"><strong>Kategori Adı</strong></label>
+                    <div class="col-md-10">
+                        <input asp-for="Category.Name" class="form-control" placeholder="Kategori adı giriniz" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-10 offset-md-2">
+                        <a id="hideAddForm" class="btn btn-danger btn-sm" style="color:white">Vazgeç</a>
+                        <button type="submit" class="btn btn-primary btn-sm">Kaydet</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<div id="editFormContainer" class="card" style="margin-bottom:20px;padding:15px;box-shadow: 5px 4px 12px 0px #00000052;display:none">
+    <div class="row">
+        <div class="col-md-12">
+            <form id="editForm" asp-controller="Category" asp-action="Edit" method="post">
+                <input type="hidden" id="id" asp-for="Category.Id" />
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label"><strong>Kategori Adı</strong></label>
+                    <div class="col-md-10">
+                        <input id="name" asp-for="Category.Name" class="form-control" placeholder="Kategori adı giriniz" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-10 offset-md-2">
+                        <a id="hideEditForm" class="btn btn-danger btn-sm" style="color:white">Vazgeç</a>
+                        <button type="submit" class="btn btn-info btn-sm">Düzenle</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="categoryListContainer" class="card" style="padding:15px;box-shadow: 5px 4px 12px 0px #00000052">
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th class="text-align:right">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ListCategories)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td align="right">
+                        <button onclick="editItem(@item.Id)" class="btn btn-success mr-2 btn-sm">Düzenle</button>
+                        <form action="/category/delete" method="post" style="display: inline">
+                            <input type="hidden" name="Id" value="@item.Id" />
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Turkish.json"
+            }
+        });
+    });
+
+    document.getElementById("showAddForm").addEventListener("click", function () {
+        document.getElementById("addFormContainer").style.display = "block";
+    });
+
+    document.getElementById("hideAddForm").addEventListener("click", function () {
+        document.getElementById("addFormContainer").style.display = "none";
+    });
+
+    document.getElementById("hideEditForm").addEventListener("click", function () {
+        document.getElementById("editFormContainer").style.display = "none";
+    });
+
+    //function refreshGetAllCategories() {
+    //    $.ajax({
+    //        url: '/Category/GetAllCategories',
+    //        type: 'GET',
+    //        success: function (result) {
+    //            $('#categoryListContainer').html(result);
+
+    //        },
+    //        error: function (error) {
+    //        }
+    //    });
+    //}
+
+    function editItem(itemId) {
+        $.ajax({
+            url: '/Category/GetById',
+            type: 'POST',
+            data: { id: itemId },
+            success: function (result) {
+                $('#id').val(result.category.id);
+                $('#name').val(result.category.name);
+
+                console.log(result.category.id)
+                console.log($('#id'))
+
+                $('#editFormContainer').show();
+            },
+            error: function (error) {
+
+            }
+        });
+    }
+
+    $(function () {
+        $('#editForm').submit(function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '/Category/Edit',
+                type: 'POST',
+                data: $('#editForm').serialize(),
+                success: function (result) {
+                    //refreshGetAllCategories();
+                    location.reload();
+                    $('#editFormContainer').hide();
+
+                },
+                error: function (error) {
+
+                }
+            });
+        });
+    });
+
+</script>
