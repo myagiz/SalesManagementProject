@@ -1,0 +1,223 @@
+﻿@model Entities.DTOs.AllProductDto
+
+<div style="margin-bottom:20px;text-align: right;">
+    <div class="row">
+        <div class="col-md-9">
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-primary" id="showAddForm">Ürün Ekle</button>
+        </div>
+    </div>
+</div>
+
+@if (TempData["Error"]! != null)
+{
+    <div style="margin-bottom:20px" class="alert alert-danger" role="alert">
+
+        <div class="text-danger">@TempData["Error"]</div>
+    </div>
+
+}
+
+<div id="addFormContainer" class="card" style="margin-bottom:20px;padding:15px;box-shadow: 5px 4px 12px 0px #00000052;display:none">
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-controller="Product" asp-action="Add" method="post" enctype="multipart/form-data">
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label"><strong>Kategori</strong></label>
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(x=>x.CreateProduct.CategoryId,(List<SelectListItem>)ViewBag.Categories,new {@class="form-control form-control-sm"})
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label"><strong>Ürün Adı</strong></label>
+                    <div class="col-md-10">
+                        <input asp-for="CreateProduct.Name" class="form-control form-control-sm" placeholder="Ürün adı giriniz" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label"><strong>Satış Fiyatı</strong></label>
+                    <div class="col-md-10">
+                        <input asp-for="CreateProduct.Salesprice" class="form-control form-control-sm" placeholder="Satış fiyatı giriniz" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label"><strong>Ürün Resmi</strong></label>
+                    <div class="col-md-10">
+                        <input type="file" asp-for="CreateProduct.ImageFile" name="CreateProduct.ImageFile" class="form-control form-control-sm" placeholder="Ürün resmi seçebilirsiniz" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-10 offset-md-2">
+                        <a id="hideAddForm" class="btn btn-danger btn-sm" style="color:white">Vazgeç</a>
+                        <button type="submit" class="btn btn-primary btn-sm">Kaydet</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<div id="editFormContainer" class="card" style="margin-bottom:20px;padding:15px;box-shadow: 5px 4px 12px 0px #00000052;display:none">
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-controller="Product" asp-action="Edit" method="post" enctype="multipart/form-data">
+                <input type="hidden" id="id" asp-for="UpdateProduct.Id" />
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label"><strong>Kategori</strong></label>
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(x=>x.UpdateProduct.CategoryId,(List<SelectListItem>)ViewBag.Categories,new {@class="form-control form-control-sm",id="categoryId"})
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label"><strong>Ürün Adı</strong></label>
+                    <div class="col-md-10">
+                        <input id="name" asp-for="UpdateProduct.Name" class="form-control form-control-sm" placeholder="Ürün adı giriniz" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label"><strong>Satış Fiyatı</strong></label>
+                    <div class="col-md-10">
+                        <input id="salesprice" asp-for="UpdateProduct.Salesprice" class="form-control form-control-sm" placeholder="Satış fiyatı giriniz" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label"><strong>Ürün Resmi</strong></label>
+                    <div class="col-md-10">
+                        <img id="imageSrc" style="max-height:100px;max-width:100px" alt="Mevcut Resim" />
+                    </div>
+                    <label class="col-md-2 col-form-label"><strong></strong></label>
+                    <div class="col-md-10">
+                        <input type="file" asp-for="UpdateProduct.ImageFile" name="UpdateProduct.ImageFile" class="form-control form-control-sm" placeholder="Ürün resmi seçebilirsiniz" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-10 offset-md-2">
+                        <a id="hideEditForm" class="btn btn-danger btn-sm" style="color:white">Vazgeç</a>
+                        <button type="submit" class="btn btn-info btn-sm">Düzenle</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="productListContainer" class="card" style="padding:15px;box-shadow: 5px 4px 12px 0px #00000052">
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Resim</th>
+                <th>Ürün Adı</th>
+                <th>Kategori</th>
+                <th>Satış Fiyatı</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ListProducts)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>
+                        <img style="max-height:50px;max-width:50px" src="/images/@item.ImageSrc" alt="no-image" />
+                    </td>
+                    <td>@item.Name.Substring(0, Math.Min(item.Name.Length, 41))..</td>
+                    <td>@item.CategoryName</td>
+                    <td>@item.Salesprice TL</td>
+                    <td align="right">
+                        <button onclick="editItem(@item.Id)" class="btn btn-success mr-2 btn-sm">Düzenle</button>
+                        <form action="/product/delete" method="post" style="display: inline">
+                            <input type="hidden" name="Id" value="@item.Id" />
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Turkish.json"
+            }
+        });
+    });
+    //$(document).ready(function () {
+    //    $('#categoryid').select2({
+    //        width: '100%',
+    //        placeholder: 'Kategori seçiniz',
+    //    });
+    //});
+
+    document.getElementById("showAddForm").addEventListener("click", function () {
+        document.getElementById("addFormContainer").style.display = "block";
+        $('#editFormContainer').hide();
+
+    });
+
+    document.getElementById("hideAddForm").addEventListener("click", function () {
+        document.getElementById("addFormContainer").style.display = "none";
+        $('#editFormContainer').hide();
+
+    });
+
+    document.getElementById("hideEditForm").addEventListener("click", function () {
+        document.getElementById("editFormContainer").style.display = "none";
+    });
+
+    function editItem(itemId) {
+        $.ajax({
+            url: '/Product/GetById',
+            type: 'POST',
+            data: { id: itemId },
+            success: function (result) {
+                $('#id').val(result.product.id);
+                $('#name').val(result.product.name);
+                $('#categoryId').val(result.product.categoryId);
+                $('#imageSrc').val(result.product.imageSrc);
+                $('#salesprice').val(result.product.salesprice);
+                $('#quantity').val(result.product.quantity);
+                debugger
+                document.getElementById("imageSrc").src = "/images/" + result.product.imageSrc;
+                $('#editFormContainer').show();
+                $('#addFormContainer').hide();
+
+            },
+            error: function (error) {
+
+            }
+        });
+    }
+
+    $(function () {
+        $('#editForm').submit(function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '/Product/Edit',
+                type: 'POST',
+                data: $('#editForm').serialize(),
+                success: function (result) {
+                    //refreshGetAllCategories();
+                    location.reload();
+                    $('#editFormContainer').hide();
+                    $('#addFormContainer').hide();
+
+
+                },
+                error: function (error) {
+
+                }
+            });
+        });
+    });
+
+</script>
