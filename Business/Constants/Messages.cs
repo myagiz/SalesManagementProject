@@ -21,5 +21,11 @@ namespace Business.Constants
         public static string SuccessGetById = "Veri başarıyla getirildi.";
 
         public static string SuccessListed= "Veriler başarıyla listelendi..";
+
+        public static string GeneralError= "Bir şeyler ters gitti ! Tekrar deneyiniz";
+
+        public static string NotEnoughStock= "Stok adediniz yoktur!";
+
+        public static string NotSavedProductStock= "Ürününüze ait stok kaydı yoktur !";
     }
 }

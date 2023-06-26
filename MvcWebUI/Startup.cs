@@ -40,6 +40,8 @@ namespace MvcWebUI
             services.AddTransient<ICategoryService, CategoryManager>();
             services.AddTransient<ICustomerService, CustomerManager>();
             services.AddTransient<IProductService, ProductManager>();
+            services.AddTransient<ISaleService, SaleManager>();
+            services.AddTransient<IStockService, StockManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

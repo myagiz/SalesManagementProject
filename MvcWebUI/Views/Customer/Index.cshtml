@@ -82,6 +82,7 @@
                 <th>Müşteri Adı</th>
                 <th>Müşteri No</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -92,7 +93,9 @@
                     <td>@item.Customertitle</td>
                     <td>@item.Customernumber</td>
                     <td align="right">
-                        <button onclick="editItem(@item.Id)" class="btn btn-success mr-2 btn-sm">Düzenle</button>
+                        <button onclick="editItem(@item.Id)" class="btn btn-success mr-2 btn-sm">Düzenle</button>                    
+                    </td>
+                     <td align="right">
                         <form action="/customer/delete" method="post" style="display: inline">
                             <input type="hidden" name="Id" value="@item.Id" />
                             <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>

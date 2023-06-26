@@ -8,7 +8,12 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstract
 {
-    public interface IStockDal:IEntityRepository<Stock>
+    public interface IStockDal : IEntityRepository<Stock>
     {
+        public string UpdateStockForAddMethod(int? productId, double? exitStockQuantity);
+        public string UpdateStockForUpdateMethod(int? productId, double? exitStockQuantity, double? exitLastStockQuantity);
+        public string UpdateStockForDeleteMethod(int? productId, double? stockQuantity);
+        public Task<double> GetStockQuantityByProductIdAsync(int productId);
+
     }
 }

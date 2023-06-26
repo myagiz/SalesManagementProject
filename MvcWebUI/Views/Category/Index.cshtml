@@ -70,6 +70,7 @@
                 <th>ID</th>
                 <th>Kategori Adı</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -79,7 +80,9 @@
                     <td>@item.Id</td>
                     <td>@item.Name</td>
                     <td align="right">
-                        <button onclick="editItem(@item.Id)" class="btn btn-success mr-2 btn-sm">Düzenle</button>
+                        <button onclick="editItem(@item.Id)" class="btn btn-success mr-2 btn-sm">Düzenle</button>                      
+                    </td>
+                     <td align="right">
                         <form action="/category/delete" method="post" style="display: inline">
                             <input type="hidden" name="Id" value="@item.Id" />
                             <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>

@@ -1,11 +1,11 @@
-﻿@model Entities.DTOs.AllProductDto
+﻿@model Entities.DTOs.AllSaleDto
 
 <div style="margin-bottom:20px;text-align: right;">
     <div class="row">
         <div class="col-md-9">
         </div>
         <div class="col-md-3">
-            <button class="btn btn-primary" id="showAddForm">Ürün Ekle</button>
+            <button class="btn btn-primary" id="showAddForm">Satış Ekle</button>
         </div>
     </div>
 </div>
@@ -19,32 +19,36 @@
 
 }
 
+
 <div id="addFormContainer" class="card" style="margin-bottom:20px;padding:15px;box-shadow: 5px 4px 12px 0px #00000052;display:none">
     <div class="row">
         <div class="col-md-12">
-            <form asp-controller="Product" asp-action="Add" method="post" enctype="multipart/form-data">
+            <form asp-controller="Sale" asp-action="Add" method="post">
                 <div class="form-group row">
-                    <label class="col-md-2 col-form-label"><strong>Kategori</strong></label>
+                    <label class="col-md-2 col-form-label"><strong>Müşteri Adı</strong></label>
                     <div class="col-md-10">
-                        @Html.DropDownListFor(x=>x.CreateProduct.CategoryId,(List<SelectListItem>)ViewBag.Categories,new {@class="form-control form-control-sm"})
+                        @Html.DropDownListFor(x=>x.CreateSale.CustomerId,(List<SelectListItem>)ViewBag.Customers,new {@class="form-control form-control-sm"})
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-md-2 col-form-label"><strong>Ürün Adı</strong></label>
                     <div class="col-md-10">
-                        <input asp-for="CreateProduct.Name" class="form-control form-control-sm" placeholder="Ürün adı giriniz" />
+                        @Html.DropDownListFor(x=>x.CreateSale.ProductId,(List<SelectListItem>)ViewBag.Products,new {@class="form-control form-control-sm",onchange = "updateStock()",id="productId" })
+                    </div>
+                    <label class="col-md-2 col-form-label"></label>
+                    <div class="col-md-10" id="stockMessage">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-md-2 col-form-label"><strong>Satış Fiyatı</strong></label>
                     <div class="col-md-10">
-                        <input asp-for="CreateProduct.Salesprice" class="form-control form-control-sm" placeholder="Satış fiyatı giriniz" />
+                        <input asp-for="CreateSale.Salesprice" class="form-control form-control-sm" placeholder="Satış fiyatı giriniz" />
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-md-2 col-form-label"><strong>Ürün Resmi</strong></label>
+                    <label class="col-md-2 col-form-label"><strong>Satış Adeti</strong></label>
                     <div class="col-md-10">
-                        <input type="file" asp-for="CreateProduct.ImageFile" name="CreateProduct.ImageFile" class="form-control form-control-sm" placeholder="Ürün resmi seçebilirsiniz" />
+                        <input type="number" asp-for="CreateSale.Quantity" class="form-control form-control-sm" placeholder="Satış adeti giriniz" />
                     </div>
                 </div>
                 <div class="form-group row">
@@ -63,40 +67,39 @@
 <div id="editFormContainer" class="card" style="margin-bottom:20px;padding:15px;box-shadow: 5px 4px 12px 0px #00000052;display:none">
     <div class="row">
         <div class="col-md-12">
-            <form asp-controller="Product" asp-action="Edit" method="post" enctype="multipart/form-data">
-                <input type="hidden" id="id" asp-for="UpdateProduct.Id" />
+            <form asp-controller="Sale" asp-action="Edit" method="post">
+                <input type="hidden" id="id" asp-for="UpdateSale.Id" />
                 <div class="form-group row">
-                    <label class="col-md-2 col-form-label"><strong>Kategori</strong></label>
+                    <label class="col-md-2 col-form-label"><strong>Müşteri Adı</strong></label>
                     <div class="col-md-10">
-                        @Html.DropDownListFor(x=>x.UpdateProduct.CategoryId,(List<SelectListItem>)ViewBag.Categories,new {@class="form-control form-control-sm",id="categoryId"})
+                        @Html.DropDownListFor(x=>x.UpdateSale.CustomerId,(List<SelectListItem>)ViewBag.Customers,new {@class="form-control form-control-sm"})
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-md-2 col-form-label"><strong>Ürün Adı</strong></label>
                     <div class="col-md-10">
-                        <input id="name" asp-for="UpdateProduct.Name" class="form-control form-control-sm" placeholder="Ürün adı giriniz" />
+                        @Html.DropDownListFor(x=>x.UpdateSale.ProductId,(List<SelectListItem>)ViewBag.Products,new {@class="form-control form-control-sm",onchange = "updateStock()",id="productId"})
+                    </div>
+                    <label class="col-md-2 col-form-label"></label>
+                    <div class="col-md-10" id="stockMessage">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-md-2 col-form-label"><strong>Satış Fiyatı</strong></label>
                     <div class="col-md-10">
-                        <input id="salesprice" asp-for="UpdateProduct.Salesprice" class="form-control form-control-sm" placeholder="Satış fiyatı giriniz" />
+                        <input id="salesprice" asp-for="UpdateSale.Salesprice" class="form-control form-control-sm" placeholder="Satış fiyatı giriniz" />
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-md-2 col-form-label"><strong>Ürün Resmi</strong></label>
+                    <label class="col-md-2 col-form-label"><strong>Satış Adeti</strong></label>
                     <div class="col-md-10">
-                        <img id="imageSrc" style="max-height:100px;max-width:100px" alt="Mevcut Resim" />
-                    </div>
-                    <label class="col-md-2 col-form-label"><strong></strong></label>
-                    <div class="col-md-10">
-                        <input type="file" asp-for="UpdateProduct.ImageFile" name="UpdateProduct.ImageFile" class="form-control form-control-sm" placeholder="Ürün resmi seçebilirsiniz" />
+                        <input type="number id="quantity" asp-for="UpdateSale.Quantity" class="form-control form-control-sm" placeholder="Satış adeti giriniz" />
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-md-10 offset-md-2">
                         <a id="hideEditForm" class="btn btn-danger btn-sm" style="color:white">Vazgeç</a>
-                        <button type="submit" class="btn btn-info btn-sm">Düzenle</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Kaydet</button>
                     </div>
                 </div>
             </form>
@@ -104,36 +107,41 @@
     </div>
 </div>
 
-<div id="productListContainer" class="card" style="padding:15px;box-shadow: 5px 4px 12px 0px #00000052">
+<div id="saleListContainer" class="card" style="padding:15px;box-shadow: 5px 4px 12px 0px #00000052">
     <table id="dataTable">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Resim</th>
-                <th>Ürün Adı</th>
-                <th>Kategori</th>
+                <th>Müşteri</th>
+                <th>Ürün</th>
+                <th>Satış Adeti</th>
                 <th>Satış Fiyatı</th>
+                <th>Toplam Fiyat</th>
+                <th>Liste Fiyatı</th>
+                <th>İskonto Oranı</th>
+                <th>Olş. Tarihi</th>
                 <th></th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.ListProducts)
+            @foreach (var item in Model.ListSales)
             {
                 <tr>
                     <td>@item.Id</td>
-                    <td>
-                        <img style="max-height:50px;max-width:50px" src="/images/@item.ImageSrc" alt="no-image" />
-                    </td>
-                    <td>@item.Name.Substring(0, Math.Min(item.Name.Length, 41))..</td>
-                    <td>@item.CategoryName</td>
+                    <td>@item.CustomerName</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.Quantity Adet</td>
                     <td>@item.Salesprice TL</td>
+                    <td>@item.Amount TL</td>
+                    <td>@item.Listprice TL</td>
+                    <td>@item.Discountrate</td>
+                    <td>@item.Date</td>
                     <td align="right">
                         <button onclick="editItem(@item.Id)" class="btn btn-success mr-2 btn-sm">Düzenle</button>
-                       
                     </td>
                     <td align="right">
-                        <form action="/product/delete" method="post" style="display: inline">
+                        <form action="/sale/delete" method="post" style="display: inline">
                             <input type="hidden" name="Id" value="@item.Id" />
                             <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>
                         </form>
@@ -154,13 +162,6 @@
             }
         });
     });
-    //$(document).ready(function () {
-    //    $('#categoryid').select2({
-    //        width: '100%',
-    //        placeholder: 'Kategori seçiniz',
-    //    });
-    //});
-
     document.getElementById("showAddForm").addEventListener("click", function () {
         document.getElementById("addFormContainer").style.display = "block";
         $('#editFormContainer').hide();
@@ -179,18 +180,14 @@
 
     function editItem(itemId) {
         $.ajax({
-            url: '/Product/GetById',
+            url: '/Sale/GetById',
             type: 'POST',
             data: { id: itemId },
             success: function (result) {
-                $('#id').val(result.product.id);
-                $('#name').val(result.product.name);
-                $('#categoryId').val(result.product.categoryId);
-                $('#imageSrc').val(result.product.imageSrc);
-                $('#salesprice').val(result.product.salesprice);
-                $('#quantity').val(result.product.quantity);
-                debugger
-                document.getElementById("imageSrc").src = "/images/" + result.product.imageSrc;
+                $('#id').val(result.sale.id);
+                $('#quantity').val(result.sale.quantity);
+                $('#salesprice').val(result.sale.salesprice);
+
                 $('#editFormContainer').show();
                 $('#addFormContainer').hide();
 
@@ -206,7 +203,7 @@
             e.preventDefault();
 
             $.ajax({
-                url: '/Product/Edit',
+                url: '/Sale/Edit',
                 type: 'POST',
                 data: $('#editForm').serialize(),
                 success: function (result) {
@@ -223,5 +220,25 @@
             });
         });
     });
+
+
+    async function updateStock() {
+
+        var selectedProductId = document.getElementById("productId").value;
+        console.log(selectedProductId)
+        try {
+            var response = await fetch('@Url.Action("GetStocks", "Sale")?productId=' + selectedProductId);
+            var data = await response.text();
+            if (data > 0) {
+
+                document.getElementById("stockMessage").innerHTML = "<div class='alert alert-success alert-dismissible fade show' role='alert'><small><strong>Bu ürüne ait stok adeti: " + data + "</strong></small><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"
+            }
+            else {
+                document.getElementById("stockMessage").innerHTML = "<div class='alert alert-danger alert-dismissible fade show' role='alert'><small><strong>Bu ürüne ait stok bulunmamaktadır!</strong></small><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 </script>
