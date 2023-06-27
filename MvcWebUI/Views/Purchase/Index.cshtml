@@ -1,11 +1,11 @@
-﻿@model Entities.DTOs.AllSaleDto
+﻿@model Entities.DTOs.AllPurchaseDto
 
 <div style="margin-bottom:20px;text-align: right;">
     <div class="row">
         <div class="col-md-9">
         </div>
         <div class="col-md-3">
-            <button class="btn btn-primary" id="showAddForm">Satış Ekle</button>
+            <button class="btn btn-primary" id="showAddForm">Alış Ekle</button>
         </div>
     </div>
 </div>
@@ -19,36 +19,35 @@
 
 }
 
-
 <div id="addFormContainer" class="card" style="margin-bottom:20px;padding:15px;box-shadow: 5px 4px 12px 0px #00000052;display:none">
     <div class="row">
         <div class="col-md-12">
-            <form asp-controller="Sale" asp-action="Add" method="post">
+            <form asp-controller="Purchase" asp-action="Add" method="post">
                 <div class="form-group row">
                     <label class="col-md-2 col-form-label"><strong>Müşteri Adı</strong></label>
                     <div class="col-md-10">
-                        @Html.DropDownListFor(x=>x.CreateSale.CustomerId,(List<SelectListItem>)ViewBag.Customers,new {@class="form-control form-control-sm"})
+                        @Html.DropDownListFor(x=>x.CreatePurchase.CustomerId,(List<SelectListItem>)ViewBag.Customers,new {@class="form-control form-control-sm"})
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-md-2 col-form-label"><strong>Ürün Adı</strong></label>
                     <div class="col-md-10">
-                        @Html.DropDownListFor(x=>x.CreateSale.ProductId,(List<SelectListItem>)ViewBag.Products,new {@class="form-control form-control-sm",onchange = "updateStock()",id="productId" })
+                        @Html.DropDownListFor(x=>x.CreatePurchase.ProductId,(List<SelectListItem>)ViewBag.Products,new {@class="form-control form-control-sm",onchange = "updateStock()",id="productId" })
                     </div>
                     <label class="col-md-2 col-form-label"></label>
                     <div class="col-md-10" id="stockMessage">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-md-2 col-form-label"><strong>Satış Fiyatı</strong></label>
+                    <label class="col-md-2 col-form-label"><strong>Alış Fiyatı</strong></label>
                     <div class="col-md-10">
-                        <input asp-for="CreateSale.Salesprice" class="form-control form-control-sm" placeholder="Satış fiyatı giriniz" />
+                        <input asp-for="CreatePurchase.Price" class="form-control form-control-sm" placeholder="Alış fiyatı giriniz" />
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-md-2 col-form-label"><strong>Satış Adeti</strong></label>
+                    <label class="col-md-2 col-form-label"><strong>Alış Adeti</strong></label>
                     <div class="col-md-10">
-                        <input type="number" asp-for="CreateSale.Quantity" class="form-control form-control-sm" placeholder="Satış adeti giriniz" />
+                        <input type="number" asp-for="CreatePurchase.Quantity" class="form-control form-control-sm" placeholder="Alış adeti giriniz" />
                     </div>
                 </div>
                 <div class="form-group row">
@@ -67,33 +66,33 @@
 <div id="editFormContainer" class="card" style="margin-bottom:20px;padding:15px;box-shadow: 5px 4px 12px 0px #00000052;display:none">
     <div class="row">
         <div class="col-md-12">
-            <form asp-controller="Sale" asp-action="Edit" method="post">
-                <input type="hidden" id="id" asp-for="UpdateSale.Id" />
+            <form asp-controller="Purchase" asp-action="Edit" method="post">
+                <input type="hidden" id="id" asp-for="UpdatePurchase.Id" />
                 <div class="form-group row">
                     <label class="col-md-2 col-form-label"><strong>Müşteri Adı</strong></label>
                     <div class="col-md-10">
-                        @Html.DropDownListFor(x=>x.UpdateSale.CustomerId,(List<SelectListItem>)ViewBag.Customers,new {@class="form-control form-control-sm"})
+                        @Html.DropDownListFor(x=>x.UpdatePurchase.CustomerId,(List<SelectListItem>)ViewBag.Customers,new {@class="form-control form-control-sm"})
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-md-2 col-form-label"><strong>Ürün Adı</strong></label>
                     <div class="col-md-10">
-                        @Html.DropDownListFor(x=>x.UpdateSale.ProductId,(List<SelectListItem>)ViewBag.Products,new {@class="form-control form-control-sm",onchange = "updateStock()",id="productId"})
+                        @Html.DropDownListFor(x=>x.UpdatePurchase.ProductId,(List<SelectListItem>)ViewBag.Products,new {@class="form-control form-control-sm",onchange = "updateStockForUpdate()",id="productIdUpdate"})
                     </div>
                     <label class="col-md-2 col-form-label"></label>
-                    <div class="col-md-10" id="stockMessage">
+                    <div class="col-md-10" id="updateStockForUpdate">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-md-2 col-form-label"><strong>Satış Fiyatı</strong></label>
+                    <label class="col-md-2 col-form-label"><strong>Alış Fiyatı</strong></label>
                     <div class="col-md-10">
-                        <input id="salesprice" asp-for="UpdateSale.Salesprice" class="form-control form-control-sm" placeholder="Satış fiyatı giriniz" />
+                        <input id="price" asp-for="UpdatePurchase.Price" class="form-control form-control-sm" placeholder="Alış fiyatı giriniz" />
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-md-2 col-form-label"><strong>Satış Adeti</strong></label>
+                    <label class="col-md-2 col-form-label"><strong>Alış Adeti</strong></label>
                     <div class="col-md-10">
-                        <input type="number" id="quantity" asp-for="UpdateSale.Quantity" class="form-control form-control-sm" placeholder="Satış adeti giriniz" />
+                        <input type="number" id="quantity" asp-for="UpdatePurchase.Quantity" class="form-control form-control-sm" placeholder="Alış adeti giriniz" />
                     </div>
                 </div>
                 <div class="form-group row">
@@ -107,41 +106,37 @@
     </div>
 </div>
 
-<div id="saleListContainer" class="card" style="padding:15px;box-shadow: 5px 4px 12px 0px #00000052">
+<div id="purchaseListContainer" class="card" style="padding:15px;box-shadow: 5px 4px 12px 0px #00000052">
     <table id="dataTable">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Müşteri</th>
                 <th>Ürün</th>
-                <th>Satış Adeti</th>
-                <th>Satış Fiyatı</th>
+                <th>Alış Adeti</th>
+                <th>Alış Fiyatı</th>
                 <th>Toplam Fiyat</th>
-                <th>Liste Fiyatı</th>
-                <th>İskonto Oranı</th>
                 <th>Olş. Tarihi</th>
                 <th></th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.ListSales)
+            @foreach (var item in Model.ListPurchases)
             {
                 <tr>
                     <td>@item.Id</td>
                     <td>@item.CustomerName</td>
                     <td>@item.ProductName</td>
                     <td>@item.Quantity Adet</td>
-                    <td>@item.Salesprice TL</td>
+                    <td>@item.Price TL</td>
                     <td>@item.Amount TL</td>
-                    <td>@item.Listprice TL</td>
-                    <td>@item.Discountrate</td>
                     <td>@item.Date</td>
                     <td align="right">
                         <button onclick="editItem(@item.Id)" class="btn btn-success mr-2 btn-sm">Düzenle</button>
                     </td>
                     <td align="right">
-                        <form action="/sale/delete" method="post" style="display: inline">
+                        <form action="/purchase/delete" method="post" style="display: inline">
                             <input type="hidden" name="Id" value="@item.Id" />
                             <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>
                         </form>
@@ -151,7 +146,6 @@
         </tbody>
     </table>
 </div>
-
 
 
 <script>
@@ -180,13 +174,14 @@
 
     function editItem(itemId) {
         $.ajax({
-            url: '/Sale/GetById',
+            url: '/Purchase/GetById',
             type: 'POST',
             data: { id: itemId },
             success: function (result) {
-                $('#id').val(result.sale.id);
-                $('#quantity').val(result.sale.quantity);
-                $('#salesprice').val(result.sale.salesprice);
+                $('#id').val(result.purchase.id);
+                $('#quantity').val(result.purchase.quantity);
+                $('#productIdUpdate').val(result.purchase.productId);
+                $('#price').val(result.purchase.price);
 
                 $('#editFormContainer').show();
                 $('#addFormContainer').hide();
@@ -203,11 +198,10 @@
             e.preventDefault();
 
             $.ajax({
-                url: '/Sale/Edit',
+                url: '/Purchase/Edit',
                 type: 'POST',
                 data: $('#editForm').serialize(),
                 success: function (result) {
-                    //refreshGetAllCategories();
                     location.reload();
                     $('#editFormContainer').hide();
                     $('#addFormContainer').hide();
@@ -223,11 +217,11 @@
 
 
     async function updateStock() {
-
+        debugger
         var selectedProductId = document.getElementById("productId").value;
         console.log(selectedProductId)
         try {
-            var response = await fetch('@Url.Action("GetStocks", "Sale")?productId=' + selectedProductId);
+            var response = await fetch('@Url.Action("GetStocks", "Purchase")?productId=' + selectedProductId);
             var data = await response.text();
             if (data > 0) {
 
@@ -236,6 +230,29 @@
             else {
                 document.getElementById("stockMessage").innerHTML = "<div class='alert alert-danger alert-dismissible fade show' role='alert'><small><strong>Bu ürüne ait stok bulunmamaktadır!</strong></small><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"
             }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+       async function updateStockForUpdate() {
+        debugger
+        var selectedProductId = document.getElementById("productIdUpdate").value;
+       var test=document.getElementById("stockMessageForUpdate").innerHTML
+        console.log(test)
+        try {
+            var response = await fetch('@Url.Action("GetStocks", "Purchase")?productId=' + selectedProductId);
+            var data = await response.text();
+            if (data > 0) {
+
+                document.getElementById("stockMessageForUpdate").innerHTML = "<div class='alert alert-success alert-dismissible fade show' role='alert'><small><strong>Bu ürüne ait stok adeti: " + data + "</strong></small><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"
+            }
+            else {
+                document.getElementById("stockMessageForUpdate").innerHTML = "<div class='alert alert-danger alert-dismissible fade show' role='alert'><small><strong>Bu ürüne ait stok bulunmamaktadır!</strong></small><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"
+            }
+
         } catch (error) {
             console.log(error);
         }

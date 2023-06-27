@@ -14,6 +14,9 @@ namespace DataAccess.Abstract
         public string UpdateStockForUpdateMethod(int? productId, double? exitStockQuantity, double? exitLastStockQuantity);
         public string UpdateStockForDeleteMethod(int? productId, double? stockQuantity);
         public Task<double> GetStockQuantityByProductIdAsync(int productId);
+        public string AddStockForAddMethod(int? productId, double? addStockQuantity);
+        public string AddStockForUpdateMethod(int? productId, double? addStockQuantity,double? addLastStockQuantity);
+        public string AddStockForDeleteMethod(int? productId, double? stockQuantity);
 
     }
 }

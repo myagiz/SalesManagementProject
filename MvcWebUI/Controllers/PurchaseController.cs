@@ -1,19 +1,16 @@
 ﻿using Business.Abstract;
 using Entities.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using System.Threading.Tasks;
-using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Utilities.Results.Concrete;
+using System.Threading.Tasks;
 
 namespace MvcWebUI.Controllers
 {
-    public class SaleController : Controller
+    public class PurchaseController : Controller
     {
-        private readonly ISaleService _saleService;
+        private readonly IPurchaseService _purchaseService;
 
         private readonly ICustomerService _customerService;
 
@@ -21,9 +18,9 @@ namespace MvcWebUI.Controllers
 
         private readonly IStockService _stockService;
 
-        public SaleController(ISaleService saleService, ICustomerService customerService, IProductService productService, IStockService stockService)
+        public PurchaseController(IPurchaseService purchaseService, ICustomerService customerService, IProductService productService, IStockService stockService)
         {
-            _saleService = saleService;
+            _purchaseService = purchaseService;
             _customerService = customerService;
             _productService = productService;
             _stockService = stockService;
@@ -39,7 +36,6 @@ namespace MvcWebUI.Controllers
                                                                 Value = a.Id.ToString()
                                                             }
                                                  ).ToList();
-            //getDropdownCustomerList.Add(new SelectListItem { Text = "Müşteri seçiniz", Value = "", Selected = true ,Disabled=true});
             ViewBag.Customers = getDropdownCustomerList;
 
 
@@ -51,28 +47,26 @@ namespace MvcWebUI.Controllers
                                                                Value = a.Id.ToString()
                                                            }
                                                  ).ToList();
-            //getDropdownProductList.Add(new SelectListItem { Text = "Ürün seçiniz", Value = "", Selected = true, Disabled = true });
             ViewBag.Products = getDropdownProductList;
 
-            var result = await _saleService.GetAllSalesAsync();
+            var result = await _purchaseService.GetAllPurchasesAsync();
 
-            return View(new AllSaleDto
+            return View(new AllPurchaseDto
             {
-                ListSales = result.Data
+                ListPurchases = result.Data
 
             });
-
         }
 
         [HttpPost]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _saleService.GetSalesByIdAsync(id);
+            var result = await _purchaseService.GetPurchaseByIdAsync(id);
             if (result.Success)
             {
-                return Json(new AllSaleDto
+                return Json(new AllPurchaseDto
                 {
-                    Sale = result.Data
+                    Purchase = result.Data
                 });
             }
             TempData["Error"] = result.Message;
@@ -82,10 +76,10 @@ namespace MvcWebUI.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var getData = _saleService.GetSalesByIdAsync(id).Result;
+            var getData = _purchaseService.GetPurchaseByIdAsync(id).Result;
             if (getData.Success)
             {
-                var deleteResult = _saleService.DeleteSale(id);
+                var deleteResult = _purchaseService.DeletePurchase(id);
                 if (deleteResult.Success)
                 {
                     return RedirectToAction("Index");
@@ -99,18 +93,17 @@ namespace MvcWebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(AllSaleDto model)
+        public IActionResult Add(AllPurchaseDto model)
         {
-
-            var entity = new CreateSaleDto
+            var entity = new CreatePurchaseDto
             {
-                ProductId = model.CreateSale.ProductId,
-                Quantity = model.CreateSale.Quantity,
-                Salesprice = model.CreateSale.Salesprice,
-                CustomerId = model.CreateSale.CustomerId,
+                ProductId = model.CreatePurchase.ProductId,
+                Quantity = model.CreatePurchase.Quantity,
+                Price = model.CreatePurchase.Price,
+                CustomerId = model.CreatePurchase.CustomerId,
             };
 
-            var result = _saleService.AddSale(entity);
+            var result = _purchaseService.AddPurchase(entity);
             if (result.Success)
             {
                 return RedirectToAction("Index");
@@ -120,22 +113,21 @@ namespace MvcWebUI.Controllers
 
         }
 
-        [HttpPost]
-        public IActionResult Edit(AllSaleDto model)
+        public IActionResult Edit(AllPurchaseDto model)
         {
-            var control = _saleService.GetSalesByIdAsync(model.UpdateSale.Id).Result;
+            var control = _purchaseService.GetPurchaseByIdAsync(model.UpdatePurchase.Id).Result;
             if (control.Success)
             {
-                var entity = new UpdateSaleDto
+                var entity = new UpdatePurchaseDto
                 {
-                    Id = model.UpdateSale.Id,
-                    ProductId = model.UpdateSale.ProductId,
-                    Quantity = model.UpdateSale.Quantity,
-                    Salesprice = model.UpdateSale.Salesprice,
-                    CustomerId = model.UpdateSale.CustomerId,
+                    Id = model.UpdatePurchase.Id,
+                    ProductId = model.UpdatePurchase.ProductId,
+                    Quantity = model.UpdatePurchase.Quantity,
+                    Price = model.UpdatePurchase.Price,
+                    CustomerId = model.UpdatePurchase.CustomerId,
                 };
 
-                var updateMethod = _saleService.UpdateSale(entity);
+                var updateMethod = _purchaseService.UpdatePurchase(entity);
                 if (updateMethod.Success)
                 {
                     return RedirectToAction("Index");
@@ -157,5 +149,6 @@ namespace MvcWebUI.Controllers
             }
             return Content("");
         }
+
     }
 }

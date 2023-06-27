@@ -40,6 +40,7 @@ namespace MvcWebUI
             services.AddTransient<ICategoryService, CategoryManager>();
             services.AddTransient<ICustomerService, CustomerManager>();
             services.AddTransient<IProductService, ProductManager>();
+            services.AddTransient<IPurchaseService, PurchaseManager>();
             services.AddTransient<ISaleService, SaleManager>();
             services.AddTransient<IStockService, StockManager>();
         }
