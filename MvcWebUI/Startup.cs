@@ -35,6 +35,7 @@ namespace MvcWebUI
             services.AddTransient<IPurchaseDal, EfCorePurchaseDal>();
             services.AddTransient<ISalesDal, EfCoreSalesDal>();
             services.AddTransient<IStockDal, EfCoreStockDal>();
+            services.AddTransient<IReportDal, EfCoreReportDal>();
 
             //Business
             services.AddTransient<ICategoryService, CategoryManager>();
@@ -43,6 +44,7 @@ namespace MvcWebUI
             services.AddTransient<IPurchaseService, PurchaseManager>();
             services.AddTransient<ISaleService, SaleManager>();
             services.AddTransient<IStockService, StockManager>();
+            services.AddTransient<IReportService, ReportManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

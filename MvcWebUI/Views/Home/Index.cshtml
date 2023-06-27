@@ -1,8 +1,117 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<style>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+
+
+
+    h1 {
+        font-size: 32px;
+        text-align: center;
+        font-weight: 500;
+        margin-bottom: 32px;
+    }
+
+    a {
+        color: White
+    }
+
+    .item {
+        border: 2px solid #222222;
+        padding: 16px;
+        border-radius: 8px;
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        will-change: transform;
+        background-color: #ffffff;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .item:hover {
+            border-color: darkblue;
+            transform: scale(1.025);
+        }
+
+        .item svg {
+            width: 36px;
+            height: 36px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .item:hover svg {
+            color: darkblue;
+            fill: red;
+        }
+
+        .item button {
+            all: unset;
+            margin-left: auto;
+            background-color: darkblue;
+            padding: 12px 16px;
+            border-radius: 6px;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+            .item button:hover {
+                background-color: darkblue;
+            }
+
+        .item .filedata {
+            display: flex;
+            gap: 4px;
+            font-size: 12px;
+            margin-top: 8px;
+            color: #888888;
+        }
+
+</style>
+<div class="container">
+    <h1>Satış Yönetimi</h1>
+    <div class="item mb-2">
+        <img src="~/images/customer-feedback.png" />
+        <div class="filename">
+            <p>Müşteriler</p>
+        </div>
+        <button><a href="/customer">Tıkla</a></button>
+    </div>
+    <div class="item mb-2">
+        <img src="~/images/cubes.png" />
+        <div class="filename">
+            <p>Ürünler</p>
+        </div>
+        <button><a href="/product">Tıkla</a></button>
+    </div>
+    <div class="item mb-2">
+        <img src="~/images/app.png" />
+        <div class="filename">
+            <p>Kategoriler</p>
+        </div>
+        <button><a href="/category">Tıkla</a></button>
+    </div>
+    <div class="item mb-2">
+        <img src="~/images/buy.png" />
+        <div class="filename">
+            <p>Alışlar</p>
+        </div>
+        <button><a href="/purchase">Tıkla</a></button>
+    </div>
+    <div class="item mb-2">
+        <img src="~/images/acquisition.png" />
+        <div class="filename">
+            <p>Satışlar</p>
+        </div>
+        <button><a href="/sale">Tıkla</a></button>
+    </div>
+    <div class="item mb-2">
+        <img src="~/images/report.png" />
+        <div class="filename">
+            <p>Raporlar</p>
+        </div>
+        <button><a href="/report">Tıkla</a></button>
+    </div>
 </div>

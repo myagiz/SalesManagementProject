@@ -1,0 +1,125 @@
+﻿@*@model Entities.DTOs.AllReportDto
+*@<script>
+      function ShowHideDiv() {
+          var ddlPassport = document.getElementById("ddlPassport");
+
+          var stockReportForm = document.getElementById("stockReportForm");
+          stockReportForm.style.display = ddlPassport.value == "stockReportForm" ? "block" : "none";
+
+          var saleReportForm = document.getElementById("saleReportForm");
+          saleReportForm.style.display = ddlPassport.value == "saleReportForm" ? "block" : "none";
+      }
+
+</script>
+
+<div class="row">
+    <div class="col-md-10 mb-4">
+        <br />
+        <select id="ddlPassport" onchange="ShowHideDiv()" class="form-control">
+            <option value="N" style="color:red">--- Lütfen Sorgulamak İstediğiniz Raporu Tipini Seçiniz ---</option>
+            <option value="stockReportForm" onchange="listStocks()" style="font-weight:bold">1-) Stok Raporları</option>
+            <option value="saleReportForm" style="font-weight:bold">2-) Satış Raporları</option>
+        </select>
+    </div>
+</div>
+
+<div id="stockReportForm" class="card" style="padding:15px;box-shadow: 5px 4px 12px 0px #00000052;display:none">
+    <table id="dataTableForStockTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ürün</th>
+                <th>Kategori Adı</th>
+                <th>Stok Durumu</th>
+                <th>Olş. Tarihi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in @ViewBag.GetAllStockDetailsAsync)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td title="@item.ProductName">@item.ProductName.Substring(0, Math.Min(item.ProductName.Length, 41))..</td>
+                    <td>@item.CategoryName</td>
+                    <td>@item.Quantity Adet</td>
+                    <td>@item.Date</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div id="saleReportForm" class="card" style="padding:15px;box-shadow: 5px 4px 12px 0px #00000052;display:none">
+@*    <div>
+        <label for="start-date-input">Başlangıç Tarihi:</label>
+        <input type="date" id="start-date-input">
+        <label for="end-date-input">Bitiş Tarihi:</label>
+        <input type="date" id="end-date-input">
+    </div>*@
+    <table id="dataTableForSaleTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Kategori</th>
+                <th>Ürün</th>
+                <th>Müşteri</th>
+                <th>Satış Adeti</th>
+                <th>Satış Fiyatı</th>
+                <th>İskonto Oranı</th>
+                <th>İşlem Tarihi</th>
+                <th>Ürüne Ait Toplam Satış Adeti</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in @ViewBag.GetAllSaleDetailsAsync)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.CategoryName</td>
+                    <td title="@item.ProductName">@item.ProductName.Substring(0, Math.Min(item.ProductName.Length, 41))..</td>
+                    <td>@item.CustomerName</td>
+                    <td>@item.Quantity Adet</td>
+                    <td>@item.SalesPrice TL</td>
+                    <td>@item.DiscountRate</td>
+                    <td>@item.Date</td>
+                    <td>@item.TotalQuantity</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#dataTableForStockTable').DataTable({
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Turkish.json"
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $('#dataTableForSaleTable').DataTable({
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Turkish.json"
+            },
+        });
+    });
+
+
+    //$(document).ready(function () {
+    //    var table = $('#dataTableForSaleTable').DataTable();
+
+    //    $('#start-date-input, #end-date-input').on('change', function () {
+    //        var startDate = $('#start-date-input').val();
+    //        var endDate = $('#end-date-input').val();
+
+    //        table.column(7).search(startDate + ' to ' + endDate, true, false).draw();
+    //    });
+    //});
+
+
+</script>
