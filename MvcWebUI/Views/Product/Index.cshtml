@@ -32,13 +32,13 @@
                 <div class="form-group row">
                     <label class="col-md-2 col-form-label"><strong>Ürün Adı</strong></label>
                     <div class="col-md-10">
-                        <input asp-for="CreateProduct.Name" class="form-control form-control-sm" placeholder="Ürün adı giriniz" />
+                        <input maxlength="150" asp-for="CreateProduct.Name" class="form-control form-control-sm" placeholder="Ürün adı giriniz" />
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-md-2 col-form-label"><strong>Satış Fiyatı</strong></label>
                     <div class="col-md-10">
-                        <input asp-for="CreateProduct.Salesprice" class="form-control form-control-sm" placeholder="Satış fiyatı giriniz" />
+                        <input type="number" asp-for="CreateProduct.Salesprice" class="form-control form-control-sm" placeholder="Satış fiyatı giriniz" />
                     </div>
                 </div>
                 <div class="form-group row">
@@ -74,13 +74,13 @@
                 <div class="form-group row">
                     <label class="col-md-2 col-form-label"><strong>Ürün Adı</strong></label>
                     <div class="col-md-10">
-                        <input id="name" asp-for="UpdateProduct.Name" class="form-control form-control-sm" placeholder="Ürün adı giriniz" />
+                        <input maxlength="150" id="name" asp-for="UpdateProduct.Name" class="form-control form-control-sm" placeholder="Ürün adı giriniz" />
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-md-2 col-form-label"><strong>Satış Fiyatı</strong></label>
                     <div class="col-md-10">
-                        <input id="salesprice" asp-for="UpdateProduct.Salesprice" class="form-control form-control-sm" placeholder="Satış fiyatı giriniz" />
+                        <input type="number" id="salesprice" asp-for="UpdateProduct.Salesprice" class="form-control form-control-sm" placeholder="Satış fiyatı giriniz" />
                     </div>
                 </div>
                 <div class="form-group row">
